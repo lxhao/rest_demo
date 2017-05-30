@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.me.test.server.dao.UserMapper">
+    <resultMap id="BaseResultMap" type="com.me.test.server.bean.UserEntity">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="user_sex" property="userSex" javaType="com.me.test.server.bean.UserSexEnum"/>
+        <result column="nick_name" property="nickName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, username, password, user_sex, nick_name
+    </sql>
+
+    <select id="getAll" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM users
+    </select>
+
+    <select id="getOne" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM users
+        WHERE username = #{username}
+    </select>
+
+    <insert id="insert" parameterType="com.me.test.server.bean.UserEntity">
+        INSERT INTO
+        users
+        (username,password,user_sex)
+        VALUES
+        (#{username}, #{password}, #{userSex})
+    </insert>
+
+    <update id="update" parameterType="com.me.test.server.bean.UserEntity">
+        UPDATE
+        users
+        SET
+        <if test="username != null">username = #{username},</if>
+        <if test="password != null">password = #{password},</if>
+        nick_name = #{nickName}
+        WHERE
+        id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long">
+        DELETE FROM
+        users
+        WHERE
+        id =#{id}
+    </delete>
+
+    <delete id="deleteAll" parameterType="java.lang.Long">
+        DELETE FROM users
+    </delete>
+</mapper>
